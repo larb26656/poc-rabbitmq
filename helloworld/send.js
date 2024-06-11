@@ -2,9 +2,7 @@
 
 var amqp = require('amqplib/callback_api');
 
-const amqpURL = 'amqp://user:password@localhost';
-
-amqp.connect(amqpURL, function(error0, connection) {
+amqp.connect('amqp://localhost', function(error0, connection) {
     if (error0) {
         throw error0;
     }
