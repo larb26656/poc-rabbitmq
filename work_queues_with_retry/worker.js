@@ -31,11 +31,8 @@ amqp.connect('amqp://localhost', function(error0, connection) {
     if (error1) {
       throw error1;
     }
-    var queue = 'task_queue';
+    const queue = 'task_queue';
 
-    channel.assertQueue(queue, {
-      durable: true
-    });
     channel.prefetch(1);
     console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
     channel.consume(queue, async function(msg) {
@@ -50,6 +47,7 @@ amqp.connect('amqp://localhost', function(error0, connection) {
         console.log(`Retry count : ${retryCount}`);
         console.error(err);
         if (retryCount < 5) {
+          channel.ack(msg);
           headers["x-retry-count"] = retryCount + 1;
           channel.sendToQueue(
             'task_queue',
@@ -61,14 +59,12 @@ amqp.connect('amqp://localhost', function(error0, connection) {
           );
         } else {
           console.log("Reach or max retry!");
+          channel.reject(msg, false);
         }
-
-        channel.reject(msg, false);
       }
     }, {
-      // manual acknowledgment mode,
-      // see /docs/confirms for details
       noAck: false
     });
+    
   });
 });
