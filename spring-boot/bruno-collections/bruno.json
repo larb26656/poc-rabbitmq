@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "poc_rabbit_mq",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
