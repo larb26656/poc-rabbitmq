@@ -26,7 +26,8 @@ public class NotifyService {
         return notify;
     }
 
-    void commit(Long id) {
+    void commit(Long id) throws InterruptedException {
+        Thread.sleep(2000);
         val notify = notifyRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Notify not found"));
 
